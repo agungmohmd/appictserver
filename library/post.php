@@ -72,7 +72,42 @@ elseif($post['aksi'] == "profil"){
     );
   }
 
-  // next code here ///
+$profil = array();
+$member = mysqli_fetch_array(mysqli_query($mysqli, "SELECT * FROM member WHERE id_member='$post[target]'"));
+$jmlpost = mysqli_num_rows($query);
+$jmlfollow = mysqli_num_rows(mysqli_query($mysqli, "SELECT * FROM follow  WHERE id_member='$post[target]'"));
+$jmlfollower = mysqli_num_rows(mysqli_query($mysqli, "SELECT * FROM follow WHERE member_target='$post[target]'"));
+
+$profil[] = array(
+  'foto' => $member['photo'],
+  'nama' => $member['name'],
+  'jmlpost' => $jmlpost,
+  'jmlfollow' => $jmlfollow,
+  'jmlfollower' => $jmlfollower
+);
+if($query) $result = json_encode(array('success'=>true,'profil'=>$profil, 'result'=>$data));
+else $result = json_encode(array('success'=>false));
+echo $result;
 }
 
+elseif($post['aksi'] == "tambah"){
+  $entry = base64_decode($post['gambar']);
+  $image = imagecreatefromstring($entry);
+
+  $tgl = date('Y-m-d_H-i-s');
+  $directory = "images/post/post_".$tgl.".jpg";
+  imagejpeg($image, $directory);
+  imagedestroy($image);
+
+  $query = mysqli_query($mysqli, "INSERT INTO post SET 
+  id_member = '$post[member]',
+  image = '$directory',
+  post = '$post[keterangan]'
+  ");
+  $idpost = mysqli_insert_id($mysqli);
+
+  if($query) $result = json_encode(array('success'=>true, 'idpost'=>$idpost));
+else $result = json_encode(array('success'=>false));
+echo $result;
+}
 ?>
