@@ -21,7 +21,21 @@ if(member_valid($post['username'], $post['password'])){
     }
 
     if($post['aksi'] == "edit"){
-        // next code here
+        $cek_follow = mysqli_num_rows(mysqli_query($mysqli, "SELECT * FROM follow WHERE id_member='$post[member]' AND member_target='$post[target]'"));
+        if($cek_follow == 0){
+            $query = mysqli_query($mysqli, "INSERT INTO follow SET id_member = '$post[target]'");
+        
+        if($query) mysqli_query($mysqli, "INSERT INTO notification SET
+        id_member = '$post[member]',
+        message = 'mulai mengikuti anda',
+        member_target = '$post[target]',
+        new = 1
+        ");
+        $follow = 1;
+        }else {
+            $query = mysqli_query($mysqli, "DELETE FROM follow WHERE id_member'$post[target]'");
+            $follow = 0;
+        }
     }
 }
 ?>
