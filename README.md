@@ -1,0 +1,1 @@
+sebelum menggunakan, tambahkan sebuah folder dengan nama "images" di dalam folder appictserver. jadi di dalamnya ada 2 folder yaitu library yang berisi fungsi dan images yang nantinya akan berisi gambar.
