@@ -7,7 +7,7 @@ header("Content-Type: application/json; charset=utf-8");
 
 include "library/config.php";
 include "library/function_date.php";
-include "library/functionvalidation.php";
+include "library/function_validation.php";
 
 $post = json_decode(file_get_contents('php://input'), true);
 
@@ -36,6 +36,10 @@ if(member_valid($post['username'], $post['password'])){
             $query = mysqli_query($mysqli, "DELETE FROM follow WHERE id_member'$post[target]'");
             $follow = 0;
         }
+        $jml_follow = mysqli_num_rows(mysqli_query($mysqli, "SELECT * FROM follow WHERE member_target='$post[target]'"));
+        if($query) $result = json_encode(array('success'=>true, 'result'=>$follow, 'follower'=>$jml_follow));
+        else $result = json_encode(array('success'=>false));
+        echo $result;
     }
 }
 ?>

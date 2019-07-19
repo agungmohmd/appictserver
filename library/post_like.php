@@ -7,7 +7,7 @@ header("Content-Type: application/json; charset=utf-8");
 
 include "library/config.php";
 include "library/function_date.php";
-include "library/functionvalidation.php";
+include "library/function_validation.php";
 
 $post = json_decode(file_get_contents('php://input'), true);
 if(member_valid($post['username'], $post['password'])){
